@@ -7,8 +7,9 @@ import {
   Legend,
   Title,
 } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-ChartJS.register(ArcElement, Tooltip, Legend, Title);
+ChartJS.register(ArcElement, Tooltip, Legend, Title, ChartDataLabels);
 
 type SemiCircularGaugeProps = {
   endpoint: string;
@@ -17,6 +18,7 @@ type SemiCircularGaugeProps = {
   hoverBackgroundColors: string[];
   size?: number;
   cutoutPercentage?: string;
+  statusKeys: { receivedKey: string; acceptedKey: string };
 };
 
 const SemiCircularGauge: React.FC<SemiCircularGaugeProps> = ({
@@ -26,8 +28,9 @@ const SemiCircularGauge: React.FC<SemiCircularGaugeProps> = ({
   hoverBackgroundColors,
   size = 300,
   cutoutPercentage = '70%',
+  statusKeys,
 }) => {
-  const [data, setData] = useState<{ received: number; accepted: number } | null>(null);
+  const [data, setData] = useState<{ accepted: number; received: number } | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,24 +38,29 @@ const SemiCircularGauge: React.FC<SemiCircularGaugeProps> = ({
         const response = await fetch(endpoint);
         const result = await response.json();
 
-        const accepted = result.find((item: any) => item.status === 'Accepted')?.count || 0;
-        const received = result.find((item: any) => item.status === 'Received')?.count || 0;
+        const accepted = result.find(
+          (item: any) => item[statusKeys.acceptedKey]?.toLowerCase() === 'accepted' || item[statusKeys.acceptedKey]?.toLowerCase() === 'active'
+        )?.count || 0;
 
-        setData({ received, accepted });
+        const received = result.find(
+          (item: any) => item[statusKeys.receivedKey]?.toLowerCase() === 'received' || item[statusKeys.receivedKey]?.toLowerCase() === 'inactive'
+        )?.count || 0;
+
+        setData({ accepted, received });
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
     fetchData();
-  }, [endpoint]);
+  }, [endpoint, statusKeys]);
 
   const chartData = {
     labels,
     datasets: [
       {
-        label: 'Connection Request',
-        data: data ? [data.received, data.accepted] : [0, 0],
+        label: '',
+        data: data ? [data.accepted, data.received] : [0, 0],
         backgroundColor: backgroundColors,
         hoverBackgroundColor: hoverBackgroundColors,
         borderWidth: 0,
@@ -66,8 +74,7 @@ const SemiCircularGauge: React.FC<SemiCircularGaugeProps> = ({
   const options = {
     plugins: {
       legend: {
-        display: true,
-        position: 'right',
+        display: false,
         labels: {
           usePointStyle: true,
         },
@@ -76,19 +83,12 @@ const SemiCircularGauge: React.FC<SemiCircularGaugeProps> = ({
         enabled: true,
       },
       datalabels: {
-        color: '#f1f3f5',
-        borderRadius: 5,
-        padding: {
-          top: 6,
-          right: 6,
-          bottom: 6,
-          left: 6,
-        },
+        color: '#495057', 
         font: {
-          weight: 'bold',
-          size: 12,
+          weight: 600,
+          size: 14, 
         },
-        formatter: (value: number) => value,
+        formatter: (value: number) => value, // Display only the count
         anchor: 'center',
         align: 'center',
       },
@@ -104,8 +104,25 @@ const SemiCircularGauge: React.FC<SemiCircularGaugeProps> = ({
   };
 
   return (
-    <div style={{ position: 'relative', width: `${size}px`, height: `${size}px`, margin: '0 auto' }}>
-      {data ? <Doughnut data={chartData} options={options} /> : <p>Loading...</p>}
+    <div className="flex flex-col items-center">
+      <div className="relative" style={{ width: `${size}px`, height: `${size-90}px` }}>
+        {data ? (
+          <Doughnut data={chartData} options={options} />
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
+      <div className="flex justify-around w-full text-sm font-semibold text-gray-600">
+        {labels.map((label, index) => (
+          <div key={index} className="flex items-center space-x-2">
+            <span
+              className="w-3 h-3 rounded-full"
+              style={{ backgroundColor: backgroundColors[index] }}
+            ></span>
+            <span>{label}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

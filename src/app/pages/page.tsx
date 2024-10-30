@@ -43,15 +43,17 @@ const Dashboard = () => (
           </div>
 
           <div className="w-full md:w-1/2 lg:w-1/4 bg-white p-4 shadow-md rounded-lg flex flex-col">
-          <h2 className="text-xl font-bold mb-4">Connection Request</h2>
+          <h2 className="text-xl font-bold mb-4 text-center">Connection Request</h2>
           <SemiCircularGauge
-            endpoint="http://localhost:8000/api/connection-requests/"
-            labels={['Total Requests', 'Successful Connections']}
-            backgroundColors={['#FF6384', '#36A2EB']}
-            hoverBackgroundColors={['#FF4B6E', '#2896DB']}
-            size={350}
-            cutoutPercentage="70%"
-          />
+          endpoint="http://localhost:8000/api/connection-requests/"
+          labels={['Total Requests', 'Successful Connections']}
+          backgroundColors={['#FF6384', '#36A2EB']}
+          hoverBackgroundColors={['#FF4B6E', '#2896DB']}
+          size={250}
+          cutoutPercentage="70%"
+          statusKeys={{ receivedKey: 'status', acceptedKey: 'status' }}
+        />
+
 
         </div>
         </div>

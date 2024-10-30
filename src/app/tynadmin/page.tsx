@@ -10,15 +10,17 @@ export default function Home() {
             <div className="flex flex-wrap gap-6">
                 <div className='flex w-full gap-4'>
                 <div className="w-full md:w-1/2 lg:w-1/4 bg-white p-4 shadow-md rounded-lg flex flex-col">
-                    <h2 className="text-xl font-bold mb-4 text-center">Connection Request</h2>
+                    <h2 className="text-xl font-bold mb-4 text-center">Enterprise User Status</h2>
                     <SemiCircularGauge
-                        endpoint="http://localhost:8000/api/connection-requests/"
-                        labels={['Total Requests', 'Successful Connections']}
+                        endpoint="http://localhost:8000/api/userStatus/"
+                        labels={['Active', 'Inactive']}
                         backgroundColors={['#4dabf7', '#dee2e6']}
                         hoverBackgroundColors={['#4dabf7', '#dee2e6']}
-                        size={350}
-                        cutoutPercentage="80%"
-                    />
+                        size={250}
+                        cutoutPercentage="70%"
+                        statusKeys={{ receivedKey: 'status_type', acceptedKey: 'status_type' }}
+                        />
+
                     </div>
                 </div>
             </div>
