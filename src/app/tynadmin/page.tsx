@@ -20,7 +20,6 @@ export default function Home() {
                         cutoutPercentage="70%"
                         statusKeys={{ receivedKey: 'status_type', acceptedKey: 'status_type' }}
                         />
-
                     </div>
                 </div>
             </div>
