@@ -116,7 +116,7 @@ const SemiCircularGauge: React.FC<SemiCircularGaugeProps> = ({
         {labels.map((label, index) => (
           <div key={index} className="flex items-center space-x-2">
             <span
-              className="w-3 h-3 rounded-full"
+              className="w-3 h-3 rounded-sm"
               style={{ backgroundColor: backgroundColors[index] }}
             ></span>
             <span>{label}</span>

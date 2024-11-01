@@ -51,9 +51,20 @@ const PieChart = ({
 
   const defaultOptions = {
     plugins: {
+      legend: {
+        position: 'right',
+        labels: {
+          usePointStyle: false, // Use box style instead of circular points
+          boxWidth: 16,
+          boxHeight: 16,
+          padding: 20,
+          borderWidth: 1,
+          borderColor: '#ccc',
+        },  
+      },
       datalabels: {
         color: 'black',
-        backgroundColor: 'rgba(255, 255, 255, 0.7)', // Semi-transparent white badge
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
         borderRadius: 5,
         padding: {
           top: 6,
@@ -63,13 +74,13 @@ const PieChart = ({
         },
         font: {
           weight: 'bold',
-          size: 14, // Adjust to match the size specified in props
+          size: 12,
         },
-        formatter: (value: number) => value, // Show count inside badge
+        formatter: (value: number) => value,
         anchor: 'center', 
         align: 'center',
-        display: 'auto', // Ensures labels show when they fit
-        clip: false, // Prevent clipping
+        display: 'auto',
+        clip: false,
       },
     },
     maintainAspectRatio: false,
@@ -77,7 +88,7 @@ const PieChart = ({
   };
 
   return (
-    <div style={{ width: `${size}px`, height: `${size}px`, margin: '0 auto' }}>
+    <div style={{ width: `${size}px`, height: `${size-100}px`, margin: '0 auto' }}>
       {chartData.labels ? (
         <Pie data={chartData} options={defaultOptions} width={size} height={size} />
       ) : (

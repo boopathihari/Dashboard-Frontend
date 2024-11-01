@@ -1,6 +1,7 @@
 // pages/index.js
 "use client";
 
+import PieChart from '../components/Piechart';
 import SemiCircularGauge from '../components/SemiCircularGauge';
 
 
@@ -20,6 +21,14 @@ export default function Home() {
                         cutoutPercentage="70%"
                         statusKeys={{ receivedKey: 'status_type', acceptedKey: 'status_type' }}
                         />
+                    </div>
+                    <div className="w-full md:w-1/2 lg:w-1/4 bg-white p-4 shadow-md rounded-lg flex flex-col">
+                        <h2 className="text-xl font-bold mb-4 text-center">User Personas</h2>
+                        <PieChart 
+                        endpoint="http://localhost:8000/api/personasStatus/"
+                        backgroundColors={['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']}
+                        size={300}
+                    />
                     </div>
                 </div>
             </div>
