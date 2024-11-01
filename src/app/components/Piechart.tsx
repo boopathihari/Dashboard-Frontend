@@ -92,7 +92,7 @@ const PieChart = ({
       {chartData.labels ? (
         <Pie data={chartData} options={defaultOptions} width={size} height={size} />
       ) : (
-        <p>Hello</p>
+        <p>Loading...</p>
       )}
     </div>
   );
